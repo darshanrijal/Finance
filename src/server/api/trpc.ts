@@ -1,14 +1,13 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { z, ZodError } from "zod";
+import { auth } from "../auth";
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  // If using auth (e.g., Better Auth / NextAuth / Clerk), extract authorization token/session here
-  const authHeader = opts.headers.get("authorization");
-
+  const sessionData = await auth.api.getSession({ headers: opts.headers });
   return {
     headers: opts.headers,
-    authHeader,
+    sessionData,
   };
 };
 
@@ -31,13 +30,14 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.authHeader) {
+  if (!ctx.sessionData?.session) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({
     ctx: {
       ...ctx,
-      authHeader: ctx.authHeader,
+      session: ctx.sessionData.session,
+      user: ctx.sessionData.user,
     },
   });
 });

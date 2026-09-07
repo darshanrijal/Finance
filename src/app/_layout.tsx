@@ -1,8 +1,40 @@
 import { TRPCProvider } from "@/__rpc/react";
 import "@/global.css";
+import { authClient } from "@/lib/auth-client";
+import {
+  Inter_400Regular,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_900Black,
+} from "@expo-google-fonts/inter";
+import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
 
 export default function RootLayout() {
+  const { isPending: isAuthPending, error: authError } =
+    authClient.useSession();
+
+  const [fontsLoaded, fontsError] = useFonts({
+    Inter_400Regular,
+    Inter_700Bold,
+    Inter_600SemiBold,
+    Inter_900Black,
+  });
+
+  const loaded = fontsLoaded || !isAuthPending;
+  const error = fontsError || authError;
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
   return (
     <TRPCProvider>
       <Slot />

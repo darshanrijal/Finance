@@ -35,5 +35,8 @@
     "ListFooterComponentClassName",
     "ListHeaderComponentClassName"
   ],
-  "tailwindCSS.classFunctions": ["useResolveClassNames"]
+  "tailwindCSS.classFunctions": ["useResolveClassNames", "cn"],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }

@@ -1,4 +1,5 @@
 import { env } from "@/config/env";
+import { authClient } from "@/lib/auth-client";
 import { AppRouter } from "@/server/api/root";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
@@ -30,11 +31,10 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
           async headers() {
             const headers = new Map<string, string>();
             headers.set("x-trpc-source", "expo-react-native");
-
-            // Attach tokens from persistent storage if authenticated:
-            // const token = await SecureStore.getItemAsync("user_token");
-            // if (token) headers.set("authorization", `Bearer ${token}`);
-
+            const cookies = await authClient.getCookie();
+            if (cookies) {
+              headers.set("Cookie", cookies);
+            }
             return Object.fromEntries(headers);
           },
         }),

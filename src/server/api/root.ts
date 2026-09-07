@@ -1,3 +1,4 @@
+import { budgetRouter } from "./routers/budget-router";
 import { createTRPCRouter, publicProcedure } from "./trpc";
 
 export const appRouter = createTRPCRouter({
@@ -5,6 +6,7 @@ export const appRouter = createTRPCRouter({
     status: "OK",
     timestamp: new Date(),
   })),
+  budget: budgetRouter,
 });
 
 export type AppRouter = typeof appRouter;
