@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "86774001-04bf-46e6-b7aa-19db176b539d",
+  "id": "e46ccc25-9655-456a-b89c-9d393aa00508",
   "prevIds": [
-    "b33a2342-03fa-4fbc-ad19-52dea8012538"
+    "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
@@ -845,6 +845,19 @@
       "table": "user"
     },
     {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "true",
+      "generated": null,
+      "identity": null,
+      "name": "is_required_onboarding",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user"
+    },
+    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -1076,13 +1089,13 @@
         "account_id"
       ],
       "schemaTo": "public",
-      "tableTo": "account",
+      "tableTo": "money_accounts",
       "columnsTo": [
         "id"
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "name": "transactions_account_id_account_id_fkey",
+      "name": "transactions_account_id_money_accounts_id_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "transactions"
@@ -1156,6 +1169,17 @@
       "schema": "public",
       "table": "verification",
       "entityType": "pks"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "nullsNotDistinct": false,
+      "name": "bugdets_user_id_key",
+      "schema": "public",
+      "table": "bugdets",
+      "entityType": "uniques"
     },
     {
       "nameExplicit": false,

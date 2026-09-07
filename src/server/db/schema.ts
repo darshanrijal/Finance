@@ -38,6 +38,9 @@ export const user = pgTable("user", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
   currency: text("currency").default("NPR").notNull(),
+  isRequiredOnboarding: boolean("is_required_onboarding")
+    .default(true)
+    .notNull(),
 });
 
 export const session = pgTable(
@@ -133,7 +136,7 @@ export const transactions = pgTable("transactions", {
     .references(() => user.id, { onDelete: "cascade" }),
   accountId: text("account_id")
     .notNull()
-    .references(() => account.id, { onDelete: "cascade" }),
+    .references(() => accounts.id, { onDelete: "cascade" }),
   type: TransactionTypeEnum().notNull(),
   amount: numeric({ mode: "number" }).notNull(),
   category: text().notNull(),
@@ -153,7 +156,8 @@ export const budgets = pgTable("bugdets", {
   id,
   userId: text("user_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" })
+    .unique(),
   amount: numeric({ mode: "number" }).notNull(),
   lastAlertSent: timestamp("last_alert_sent", {
     mode: "date",

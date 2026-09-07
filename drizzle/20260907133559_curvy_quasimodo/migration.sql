@@ -1,1 +1,0 @@
-ALTER TABLE "user" ADD COLUMN "currency" text DEFAULT 'NPR' NOT NULL;

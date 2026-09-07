@@ -9,6 +9,6 @@ export const budgetRouter = createTRPCRouter({
       .select()
       .from(budgets)
       .where(eq(budgets.userId, user.id));
-    return budget ?? "NO_BUDGET_SET";
+    return budget;
   }),
 });
