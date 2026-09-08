@@ -20,13 +20,13 @@ export default function AuthIndexScreen() {
     startTransition(async () => {
       const { error } = await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/(app)/(main)",
+        callbackURL: "/onboarding",
       });
       if (error) {
         Alert.alert("Sign in error", error.message);
         return;
       }
-      router.replace("/(app)/(main)");
+      router.replace("/onboarding");
     });
   }
 

@@ -5,7 +5,9 @@ export default function MainIndexScreen() {
   const { data } = authClient.useSession();
   return (
     <View className="bg-background flex-1 items-center justify-center">
-      <Text className="text-foreground">{JSON.stringify(data, null, 2)}</Text>
+      <Text className="text-foreground font-brand">
+        {JSON.stringify(data, null, 2)}
+      </Text>
     </View>
   );
 }
