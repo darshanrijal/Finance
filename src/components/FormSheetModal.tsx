@@ -41,7 +41,7 @@ export default function FormSheetModal({
             onPress={() => onOpenChange(false)}
             className="items-center py-2"
           >
-            <Text className="text-secondary text-sm">Cancel</Text>
+            <Text className="text-muted-foreground text-sm">Cancel</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

@@ -1,5 +1,5 @@
-import { CategoryKey, getCategoryConfig } from "@/constants/categories";
-import { InputMethod, Transaction } from "@/constants/transaction";
+import { type CategoryKey, getCategoryConfig } from "@/constants/categories";
+import type { InputMethod, Transaction } from "@/constants/transaction";
 import { cn, formatPrice } from "@/lib/utils";
 import { Feather } from "@expo/vector-icons";
 import { Text, TouchableOpacity, View } from "react-native";

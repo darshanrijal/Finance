@@ -1,7 +1,7 @@
 import { trpc } from "@/__rpc/react";
-import { Budget } from "@/constants/Budget";
+import type { Budget } from "@/constants/Budget";
 import { useState } from "react";
-import { Text } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import FormSheetModal from "./FormSheetModal";
 
@@ -35,6 +35,20 @@ export default function BudgetModal({
 
   async function handleSave() {
     setError("");
+    const parsedAmount = Number.parseFloat(amount.replace(/,/g, ""));
+    if (!parsedAmount || parsedAmount <= 0) {
+      setError("Enter a valid monthly budget");
+      return;
+    }
+
+    await upsertBudget(
+      { amount: parsedAmount },
+      {
+        onSuccess: () => {
+          onSave();
+        },
+      },
+    );
   }
 
   return (
@@ -50,6 +64,7 @@ export default function BudgetModal({
         placeholder="e.g 5000"
         cursorColorClassName="accent-primary"
         keyboardType="numeric"
+        placeholderTextColorClassName="dark:accent-muted-foreground"
         autoFocus
         className="dark:bg-secondary border-border text-primary mb-5 rounded-xl border bg-white px-4 py-3 text-sm"
       />
@@ -59,6 +74,16 @@ export default function BudgetModal({
           {error}
         </Text>
       )}
+      <TouchableOpacity
+        onPress={handleSave}
+        disabled={isPending}
+        className="bg-primary mb-3 items-center rounded-xl py-4"
+        activeOpacity={0.85}
+      >
+        <Text className="text-primary-foreground font-brand-semibold text-sm">
+          {isPending ? "Saving…" : "Save budget"}
+        </Text>
+      </TouchableOpacity>
     </FormSheetModal>
   );
 }

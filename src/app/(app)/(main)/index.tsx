@@ -209,7 +209,7 @@ export default function MainIndexScreen() {
             </Text>
 
             <Text className="font-brand-bold text-primary text-[30px]">
-              {formatPrice(totalBalance ?? 0, currency)}
+              {totalBalance ? formatPrice(totalBalance, currency) : "___"}
             </Text>
 
             <View className="mt-4 flex-row gap-5">
@@ -277,6 +277,7 @@ export default function MainIndexScreen() {
           <TouchableOpacity
             onPress={() => router.push("/assistant")}
             className="border-border bg-secondary mb-4.5 flex-row items-center gap-2.5 rounded-2xl border p-3.5"
+            activeOpacity={0.8}
           >
             <View className="size-6.5 items-center justify-center rounded-full">
               <View className="bg-secondary-foreground size-2 animate-pulse rounded-full" />
@@ -317,13 +318,13 @@ export default function MainIndexScreen() {
                     className="h-2 rounded-full"
                     style={{
                       width: `${Math.min(
-                        Math.round((monthExpense ?? 0 / budget.amount) * 100),
+                        Math.round(((monthExpense ?? 0) / budget.amount) * 100),
                         100,
                       )}%`,
                       backgroundColor:
-                        (monthExpense ?? 0 >= budget.amount)
+                        (monthExpense ?? 0) >= budget.amount
                           ? "#FF6B4A"
-                          : (monthExpense ?? 0 >= budget.amount * 0.8)
+                          : (monthExpense ?? 0) >= budget.amount * 0.8
                             ? "#F7DC6F"
                             : "#3DDC84",
                     }}

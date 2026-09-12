@@ -14,7 +14,7 @@ export default function TabLayout() {
     <NativeTabs
       iconColor={mutedColor}
       tintColor={primaryColor}
-      rippleColor={primaryLowOpacityColor}
+      rippleColor="transparent"
       indicatorColor={primaryLowOpacityColor}
       backgroundColor={cardColor}
       labelVisibilityMode="selected"

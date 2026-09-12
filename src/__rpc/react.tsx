@@ -1,6 +1,6 @@
 import { env } from "@/config/env";
 import { authClient } from "@/lib/auth-client";
-import { AppRouter } from "@/server/api/root";
+import type { AppRouter } from "@/server/api/root";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
