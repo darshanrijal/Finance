@@ -1,7 +1,7 @@
 import { type CategoryKey, getCategoryConfig } from "@/constants/categories";
 import type { InputMethod, Transaction } from "@/constants/transaction";
 import { cn, formatPrice } from "@/lib/utils";
-import { Feather } from "@expo/vector-icons";
+import Feather from "@expo/vector-icons/Feather";
 import { Text, TouchableOpacity, View } from "react-native";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 const INPUT_METHOD_ICON: Record<InputMethod, keyof typeof Feather.glyphMap> = {

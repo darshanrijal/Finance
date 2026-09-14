@@ -7,6 +7,8 @@ import {
   Inter_700Bold,
   Inter_900Black,
 } from "@expo-google-fonts/inter";
+import Feather from "@expo/vector-icons/Feather";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -22,6 +24,8 @@ export default function RootLayout() {
     Inter_700Bold,
     Inter_600SemiBold,
     Inter_900Black,
+    ...Feather.font,
+    ...Ionicons.font,
   });
 
   const loaded = fontsLoaded || !isAuthPending;

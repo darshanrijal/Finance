@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
+    "@ai-sdk/google": "^4.0.69",
     "@better-auth/expo": "^1.7.3",
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo/ui": "~57.0.18",
@@ -15,6 +16,7 @@
     "@trpc/client": "^11.18.0",
     "@trpc/react-query": "^11.18.0",
     "@trpc/server": "^11.18.0",
+    "ai": "^7.0.99",
     "better-auth": "^1.7.3",
     "clsx": "^2.1.1",
     "currency-codes": "^2.2.0",
