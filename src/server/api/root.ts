@@ -1,4 +1,5 @@
 import { accountRouter } from "./routers/account-router";
+import { aiRouter } from "./routers/ai-router";
 import { budgetRouter } from "./routers/budget-router";
 import { onboardingRouter } from "./routers/onboarding-router";
 import { transactionRouter } from "./routers/transaction-router";
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   onboarding: onboardingRouter,
   accounts: accountRouter,
   transactions: transactionRouter,
+  ai: aiRouter,
 });
 
 export type AppRouter = typeof appRouter;
