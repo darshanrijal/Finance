@@ -7,6 +7,7 @@ import {
   CategoryKey,
   getCategoryConfig,
 } from "@/constants/categories";
+import { useUserStore } from "@/hooks/useUser";
 import { authClient } from "@/lib/auth-client";
 import { formatPrice } from "@/lib/utils";
 import Feather from "@expo/vector-icons/Feather";
@@ -59,9 +60,9 @@ const QUICK_ACTIONS = [
 
 export default function MainIndexScreen() {
   const { data: sessionData } = authClient.useSession();
+  const { currency } = useUserStore();
   const router = useRouter();
   const isDark = useUniwind().theme === "dark";
-  const currency = sessionData?.user.currency ?? "NPR";
   const [budgetModelOpen, setBudgetModelOpen] = useState(false);
 
   const {

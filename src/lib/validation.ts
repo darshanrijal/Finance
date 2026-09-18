@@ -1,5 +1,5 @@
 import type { CategoryKey } from "@/constants/categories";
-import { TransactionTypeEnum } from "@/server/db/schema";
+import { AccountTypeEnum, TransactionTypeEnum } from "@/server/db/schema";
 import { z } from "zod";
 
 export const onboardingSchema = z.object({
@@ -35,3 +35,15 @@ export const addTransactionSchema = z.object({
   date: z.date(),
 });
 export type AddTransactionValues = z.infer<typeof addTransactionSchema>;
+
+export const createAccountSchema = z.object({
+  name: z.string("Provide an account name to continue"),
+  type: z.enum(AccountTypeEnum.enumValues),
+});
+export type CreateAccountValues = z.infer<typeof createAccountSchema>;
+
+export const updateAccountSchema = z.object({
+  name: z.string().nonempty("Name is required"),
+  type: z.enum(AccountTypeEnum.enumValues, { error: "Select a account type" }),
+});
+export type UpdateAccountValues = z.infer<typeof updateAccountSchema>;
