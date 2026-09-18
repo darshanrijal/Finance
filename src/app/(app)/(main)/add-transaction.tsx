@@ -4,6 +4,7 @@ import { CalendarPicker } from "@/components/CalendarPicker";
 import { PillGroup } from "@/components/PillGroup";
 import ReciptScannerModal from "@/components/ReciptScannerModal";
 import { SafeAreaView } from "@/components/SafeAreaView";
+import { VoiceRecorderModal } from "@/components/VoiceRecorderModal";
 import type { Account } from "@/constants/account";
 import {
   CategoryKey,
@@ -13,7 +14,7 @@ import {
 import { AI_GRADIENT, AI_GRADIENT_REVERSE } from "@/constants/theme";
 import type { InputMethod } from "@/constants/transaction";
 import { useCreateTransaction } from "@/hooks/useTransactionMutations";
-import type { ReceiptTransaction } from "@/lib/ai";
+import type { ReceiptTransaction, VoiceTransaction } from "@/lib/ai";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import {
@@ -150,7 +151,7 @@ export default function AddTransaction() {
     );
   }
 
-  const applyExtraction = (result: ReceiptTransaction) => {
+  const applyExtraction = (result: ReceiptTransaction | VoiceTransaction) => {
     const categoryList =
       result.type === "INCOME" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
     const isValidCategory = (key: CategoryKey | null): key is CategoryKey =>
@@ -180,7 +181,7 @@ export default function AddTransaction() {
     }
   };
 
-  const handleVoiceExtracted = (result: ReceiptTransaction) => {
+  const handleVoiceExtracted = (result: VoiceTransaction) => {
     applyExtraction(result);
     setVoiceTranscript(result.transcript);
     setInputMethod("VOICE");
@@ -512,16 +513,16 @@ export default function AddTransaction() {
         }}
         onCaptured={handleReciptCaptured}
       />
-      {/* <VoiceRecorderModal
+      <VoiceRecorderModal
         visible={voiceModalOpen || params.action === "voice"}
         onClose={() => {
           setVoiceModalOpen(false);
-          if (params.action==="voice") {
-            router.setParams({action:undefined})
+          if (params.action === "voice") {
+            router.setParams({ action: undefined });
           }
         }}
-        onCaptured={handleVoiceExtracted}
-      /> */}
+        onExtracted={handleVoiceExtracted}
+      />
     </SafeAreaView>
   );
 }
