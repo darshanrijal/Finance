@@ -31,7 +31,7 @@
       "output": "server"
     },
     "plugins": [
-      ["expo-router", { "origin": "https://darshanrijal0-finance.expo.app" }],
+      ["expo-router", { "origin": "https://finance-api-m73t.onrender.com" }],
       [
         "expo-splash-screen",
         {

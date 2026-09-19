@@ -11,10 +11,12 @@ export const env = createEnv({
     GEMINI_API_KEY: z.string(),
   },
   client: {
-    EXPO_PUBLIC_SERVER_URL: z.url().default("https://darshanrijal0-finance.expo.app"),
+    EXPO_PUBLIC_SERVER_URL: z
+      .url()
+      .default('https://finance-api-m73t.onrender.com'),
   },
   emptyStringAsUndefined: true,
-  runtimeEnvStrict:{
+  runtimeEnvStrict: {
     DATABASE_URL: process.env.DATABASE_URL,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
