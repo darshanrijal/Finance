@@ -32,7 +32,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
+      ["expo-router", { "origin": "https://darshanrijal0-finance.expo.app" }],
       [
         "expo-splash-screen",
         {
@@ -83,6 +83,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "6ae3755a-c549-408b-8fe5-eb43df66ebba"
+      }
     }
   }
 }
