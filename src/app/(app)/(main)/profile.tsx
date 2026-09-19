@@ -21,6 +21,7 @@ import {
 } from '@/components/CurrencyPicker'
 import { SafeAreaView } from '@/components/SafeAreaView'
 import type { Account, AccountType } from '@/constants/account'
+import { useSetDefaultAccount } from '@/hooks/useAccountMutation'
 import { useUserStore } from '@/hooks/useUser'
 import { authClient } from '@/lib/auth-client'
 import { cn, formatPrice } from '@/lib/utils'
@@ -94,7 +95,7 @@ function Row({
       {value && (
         <Text
           numberOfLines={1}
-          className="mr-2 max-w-[120px] font-brand-semibold text-muted-foreground text-xs"
+          className="mr-2 max-w-30 font-brand-semibold text-muted-foreground text-xs"
         >
           {value}
         </Text>
@@ -121,8 +122,7 @@ export default function Profile() {
     isError: accountsError,
   } = trpc.accounts.getAccounts.useQuery()
 
-  const { mutateAsync: setDefaultAccount } =
-    trpc.accounts.setDefaultAccount.useMutation()
+  const { mutateAsync: setDefaultAccount } = useSetDefaultAccount()
 
   const closeModal = () => {
     setmodalVisible(false)

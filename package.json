@@ -91,5 +91,6 @@
     "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
     "typecheck": "tsc --noEmit"
   },
-  "private": true
+  "private": true,
+  "packageManager": "bun@1.4.2"
 }
