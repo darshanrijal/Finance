@@ -11,8 +11,17 @@ export const env = createEnv({
     GEMINI_API_KEY: z.string(),
   },
   client: {
-    EXPO_PUBLIC_SERVER_URL: z.url(),
+    EXPO_PUBLIC_SERVER_URL: z.url().default("https://darshanrijal0-finance.expo.app"),
   },
   emptyStringAsUndefined: true,
-  runtimeEnv: process.env,
+  runtimeEnvStrict:{
+    DATABASE_URL: process.env.DATABASE_URL,
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+    EXPO_PUBLIC_SERVER_URL: process.env.EXPO_PUBLIC_SERVER_URL,
+  },
+  skipValidation:
+    typeof window !== 'undefined' || process.env.NODE_ENV === 'production',
 })

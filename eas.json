@@ -6,17 +6,26 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_SERVER_URL": "https://darshanrijal0-finance.expo.app"
+      }
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "apk"
       },
-      "bun": "1.4.2"
+      "bun": "1.4.2",
+      "env": {
+        "EXPO_PUBLIC_SERVER_URL": "https://darshanrijal0-finance.expo.app"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_SERVER_URL": "https://darshanrijal0-finance.expo.app"
+      }
     }
   },
   "submit": {
