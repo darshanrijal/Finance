@@ -68,7 +68,6 @@ export default function MainIndexScreen() {
   const {
     data: accounts,
     isPending: isLoadingAccounts,
-    error: accountsError,
     refetch: refetchAccounts,
     isRefetching: isAccountRefetching,
   } = trpc.accounts.getAccounts.useQuery();
@@ -76,17 +75,12 @@ export default function MainIndexScreen() {
   const {
     data: transactions,
     isLoading: isLoadingTransactions,
-    error: transactionsError,
     refetch: refetchTransactions,
     isRefetching: isRefetchingTransactions,
   } = trpc.transactions.getTransactions.useQuery({});
 
-  const {
-    data: budget,
-    refetch: refetchBudget,
-    isPending: isLoadingBudget,
-    error: budgetsError,
-  } = trpc.budget.getBudget.useQuery();
+  const { data: budget, refetch: refetchBudget } =
+    trpc.budget.getBudget.useQuery();
 
   const isLoading = isLoadingAccounts || isLoadingTransactions;
   const refreshing = isAccountRefetching || isRefetchingTransactions;

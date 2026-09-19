@@ -189,6 +189,7 @@ export default function AssistantScreen() {
     if (!question || sending || !user) return;
 
     const userMessage: ChatMessage = {
+      // eslint-disable-next-line react-hooks/purity
       id: `user-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
       role: "user",
       content: question,
