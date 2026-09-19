@@ -25,6 +25,9 @@
       "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_SERVER_URL": "https://darshanrijal0-finance.expo.app"
+      },
+      "android": {
+        "buildType": "apk"
       }
     }
   },

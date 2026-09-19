@@ -28,8 +28,7 @@
       "package": "com.darshanrijal0.Finance"
     },
     "web": {
-      "output": "server",
-      "favicon": "./assets/images/favicon.png"
+      "output": "server"
     },
     "plugins": [
       ["expo-router", { "origin": "https://darshanrijal0-finance.expo.app" }],

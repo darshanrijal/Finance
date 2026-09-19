@@ -1,5 +1,25 @@
 import { auth } from '@/server/auth'
 
-const handler = auth.handler
+export async function POST(request: Request) {
+  try {
+    return await auth.handler(request)
+  } catch (error: any) {
+    console.error('❌ BETTER AUTH CRASH:', error)
+    return Response.json(
+      { error: error?.message || 'Internal Server Error', stack: error?.stack },
+      { status: 500 },
+    )
+  }
+}
 
-export { handler as GET, handler as POST }
+export async function GET(request: Request) {
+  try {
+    return await auth.handler(request)
+  } catch (error: any) {
+    console.error('❌ BETTER AUTH CRASH:', error)
+    return Response.json(
+      { error: error?.message || 'Internal Server Error', stack: error?.stack },
+      { status: 500 },
+    )
+  }
+}

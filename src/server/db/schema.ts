@@ -1,4 +1,5 @@
 import { createId } from '@paralleldrive/cuid2'
+import { defineRelations } from 'drizzle-orm'
 import {
   boolean,
   index,
@@ -166,3 +167,56 @@ export const budgets = pgTable('bugdets', {
   lastAlertThreshold: numeric({ mode: 'number' }),
   ...timestamps,
 })
+
+export const relations = defineRelations(
+  { user, session, accounts, account, transactions, budgets },
+  (r) => ({
+    user: {
+      sessions: r.many.session(),
+      accounts: r.many.account(),
+      moneyAccounts: r.many.accounts(),
+      transactions: r.many.transactions(),
+      budget: r.one.budgets(),
+    },
+
+    session: {
+      user: r.one.user({
+        from: r.session.userId,
+        to: r.user.id,
+      }),
+    },
+
+    account: {
+      user: r.one.user({
+        from: r.account.userId,
+        to: r.user.id,
+      }),
+    },
+
+    accounts: {
+      user: r.one.user({
+        from: r.accounts.userId,
+        to: r.user.id,
+      }),
+      transactions: r.many.transactions(),
+    },
+
+    transactions: {
+      user: r.one.user({
+        from: r.transactions.userId,
+        to: r.user.id,
+      }),
+      account: r.one.accounts({
+        from: r.transactions.accountId,
+        to: r.accounts.id,
+      }),
+    },
+
+    budgets: {
+      user: r.one.user({
+        from: r.budgets.userId,
+        to: r.user.id,
+      }),
+    },
+  }),
+)
