@@ -1,15 +1,15 @@
-import { addTransactionSchema } from "@/lib/validation";
-import { db } from "@/server/db";
+import { TRPCError } from '@trpc/server'
+import { and, desc, eq } from 'drizzle-orm'
+import { z } from 'zod'
+import { addTransactionSchema } from '@/lib/validation'
+import { db } from '@/server/db'
 import {
   accounts,
   TransactionInputMethods,
-  transactions,
   TransactionTypeEnum,
-} from "@/server/db/schema";
-import { TRPCError } from "@trpc/server";
-import { and, desc, eq } from "drizzle-orm";
-import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+  transactions,
+} from '@/server/db/schema'
+import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const transactionRouter = createTRPCRouter({
   getTransactions: protectedProcedure
@@ -32,8 +32,8 @@ export const transactionRouter = createTRPCRouter({
               : undefined,
           ),
         )
-        .orderBy(desc(transactions.date));
-      return data;
+        .orderBy(desc(transactions.date))
+      return data
     }),
   deleteTransaction: protectedProcedure
     .input(
@@ -53,26 +53,26 @@ export const transactionRouter = createTRPCRouter({
               eq(transactions.userId, user.id),
               eq(transactions.id, input.transactionId),
             ),
-          );
+          )
 
         const [account] = await tx
           .select({ id: accounts.id, balance: accounts.balance })
           .from(accounts)
           .where(
             and(eq(accounts.userId, user.id), eq(accounts.id, input.accountId)),
-          );
+          )
 
         if (!account) {
-          throw new TRPCError({ code: "NOT_FOUND" });
+          throw new TRPCError({ code: 'NOT_FOUND' })
         }
 
-        const delta = input.type === "INCOME" ? -input.amount : input.amount;
+        const delta = input.type === 'INCOME' ? -input.amount : input.amount
 
         await tx
           .update(accounts)
           .set({ balance: account.balance + delta })
-          .where(eq(accounts.id, account.id));
-      });
+          .where(eq(accounts.id, account.id))
+      })
     }),
   addTransaction: protectedProcedure
     .input(
@@ -106,32 +106,32 @@ export const transactionRouter = createTRPCRouter({
             inputMethod,
             voiceTranscript,
             userId: user.id,
-          });
+          })
 
           const [account] = await tx
             .select({ balance: accounts.balance, id: accounts.id })
             .from(accounts)
             .where(
               and(eq(accounts.userId, user.id), eq(accounts.id, accountId)),
-            );
+            )
 
           if (!account) {
             throw new TRPCError({
-              code: "NOT_FOUND",
-              message: "No account found",
-            });
+              code: 'NOT_FOUND',
+              message: 'No account found',
+            })
           }
           if (!account) {
-            throw new TRPCError({ code: "NOT_FOUND" });
+            throw new TRPCError({ code: 'NOT_FOUND' })
           }
 
-          const delta = type === "INCOME" ? -amount : +amount;
+          const delta = type === 'INCOME' ? -amount : +amount
 
           await tx
             .update(accounts)
             .set({ balance: account.balance + delta })
-            .where(eq(accounts.id, account.id));
-        });
+            .where(eq(accounts.id, account.id))
+        })
       },
     ),
-});
+})

@@ -1,14 +1,14 @@
-import { accountRouter } from "./routers/account-router";
-import { aiRouter } from "./routers/ai-router";
-import { budgetRouter } from "./routers/budget-router";
-import { onboardingRouter } from "./routers/onboarding-router";
-import { transactionRouter } from "./routers/transaction-router";
-import { userRouter } from "./routers/user-router";
-import { createTRPCRouter, publicProcedure } from "./trpc";
+import { accountRouter } from './routers/account-router'
+import { aiRouter } from './routers/ai-router'
+import { budgetRouter } from './routers/budget-router'
+import { onboardingRouter } from './routers/onboarding-router'
+import { transactionRouter } from './routers/transaction-router'
+import { userRouter } from './routers/user-router'
+import { createTRPCRouter, publicProcedure } from './trpc'
 
 export const appRouter = createTRPCRouter({
   health: publicProcedure.query(() => ({
-    status: "OK",
+    status: 'OK',
     timestamp: new Date(),
   })),
   budget: budgetRouter,
@@ -17,6 +17,6 @@ export const appRouter = createTRPCRouter({
   transactions: transactionRouter,
   ai: aiRouter,
   user: userRouter,
-});
+})
 
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter

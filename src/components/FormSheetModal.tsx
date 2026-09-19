@@ -5,13 +5,13 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native'
 
 interface FormSheetModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  title: string;
-  children: React.ReactNode;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  title: string
+  children: React.ReactNode
 }
 
 export default function FormSheetModal({
@@ -30,10 +30,10 @@ export default function FormSheetModal({
     >
       <KeyboardAvoidingView
         className="flex-1 justify-end"
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View className="bg-card rounded-t-2xl px-5 pt-5 pb-8">
-          <Text className="text-card-foreground mb-4 text-base font-semibold">
+        <View className="rounded-t-2xl bg-card px-5 pt-5 pb-8">
+          <Text className="mb-4 font-semibold text-base text-card-foreground">
             {title}
           </Text>
           <>{children}</>
@@ -46,5 +46,5 @@ export default function FormSheetModal({
         </View>
       </KeyboardAvoidingView>
     </Modal>
-  );
+  )
 }

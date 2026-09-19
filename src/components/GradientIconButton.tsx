@@ -1,6 +1,6 @@
-import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { ActivityIndicator, TouchableOpacity } from "react-native";
+import { Feather } from '@expo/vector-icons'
+import { LinearGradient } from 'expo-linear-gradient'
+import { ActivityIndicator, TouchableOpacity } from 'react-native'
 
 export function GradientIconButton({
   icon,
@@ -12,14 +12,14 @@ export function GradientIconButton({
   onPress,
   borderColor,
 }: {
-  icon: keyof typeof Feather.glyphMap;
-  colors: [string, string];
-  size?: number;
-  iconSize?: number;
-  loading?: boolean;
-  disabled?: boolean;
-  onPress: () => void;
-  borderColor?: string;
+  icon: keyof typeof Feather.glyphMap
+  colors: [string, string]
+  size?: number
+  iconSize?: number
+  loading?: boolean
+  disabled?: boolean
+  onPress: () => void
+  borderColor?: string
 }) {
   return (
     <TouchableOpacity
@@ -35,8 +35,8 @@ export function GradientIconButton({
           width: size,
           height: size,
           borderRadius: size / 2,
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           ...(borderColor ? { borderWidth: 3, borderColor } : null),
         }}
       >
@@ -47,5 +47,5 @@ export function GradientIconButton({
         )}
       </LinearGradient>
     </TouchableOpacity>
-  );
+  )
 }

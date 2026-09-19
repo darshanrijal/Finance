@@ -1,13 +1,13 @@
-import { env } from "@/config/env";
-import { expo } from "@better-auth/expo";
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "./db";
-import * as schema from "./db/schema";
+import { expo } from '@better-auth/expo'
+import { betterAuth } from 'better-auth'
+import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { env } from '@/config/env'
+import { db } from './db'
+import * as schema from './db/schema'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: "pg", // or "mysql", "sqlite"
+    provider: 'pg', // or "mysql", "sqlite"
     schema,
   }),
   plugins: [expo()],
@@ -25,14 +25,14 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       currency: {
-        type: "string",
+        type: 'string',
         required: true,
-        defaultValue: "NPR",
+        defaultValue: 'NPR',
         input: false,
         returned: true,
       },
       isRequiredOnboarding: {
-        type: "boolean",
+        type: 'boolean',
         required: true,
         defaultValue: true,
         input: false,
@@ -42,16 +42,16 @@ export const auth = betterAuth({
   },
 
   trustedOrigins: [
-    "finance://",
-    "finance://**",
+    'finance://',
+    'finance://**',
 
     // Development mode - Expo's exp:// scheme with local IP ranges
-    ...(process.env.NODE_ENV === "development"
+    ...(process.env.NODE_ENV === 'development'
       ? [
-          "exp://", // Trust any host of the exp:// scheme
-          "exp://**", // Trust all Expo URLs (wildcard matching)
-          "exp://192.168.*.*:*/**", // Trust 192.168.x.x IP range with any port and path
+          'exp://', // Trust any host of the exp:// scheme
+          'exp://**', // Trust all Expo URLs (wildcard matching)
+          'exp://192.168.*.*:*/**', // Trust 192.168.x.x IP range with any port and path
         ]
       : []),
   ],
-});
+})

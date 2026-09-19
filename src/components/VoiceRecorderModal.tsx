@@ -1,20 +1,16 @@
-import { AI_GRADIENT, RECORDING_GRADIENT } from "@/constants/theme";
-
-import { trpc } from "@/__rpc/react";
-import { VoiceTransaction } from "@/lib/ai";
-import Feather from "@expo/vector-icons/Feather";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Feather from '@expo/vector-icons/Feather'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import {
   RecordingPresets,
   requestRecordingPermissionsAsync,
   setAudioModeAsync,
   useAudioRecorder,
-} from "expo-audio";
-import { BlurView } from "expo-blur";
-import { File } from "expo-file-system";
-import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
-import { Modal, Text, TouchableOpacity, View } from "react-native";
+} from 'expo-audio'
+import { BlurView } from 'expo-blur'
+import { File } from 'expo-file-system'
+import { LinearGradient } from 'expo-linear-gradient'
+import { useEffect, useState } from 'react'
+import { Modal, Text, TouchableOpacity, View } from 'react-native'
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -22,20 +18,23 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { GradientIconButton } from "./GradientIconButton";
+} from 'react-native-reanimated'
+import { trpc } from '@/__rpc/react'
+import { AI_GRADIENT, RECORDING_GRADIENT } from '@/constants/theme'
+import { VoiceTransaction } from '@/lib/ai'
+import { GradientIconButton } from './GradientIconButton'
 
-type Status = "idle" | "recording" | "processing" | "error";
+type Status = 'idle' | 'recording' | 'processing' | 'error'
 
-const ORB_SIZE = 96;
+const ORB_SIZE = 96
 
 function PulseRing({ active }: { active: boolean }) {
-  const progress = useSharedValue(0);
+  const progress = useSharedValue(0)
 
   useEffect(() => {
     if (!active) {
-      progress.value = 0;
-      return;
+      progress.value = 0
+      return
     }
 
     progress.value = withRepeat(
@@ -48,8 +47,8 @@ function PulseRing({ active }: { active: boolean }) {
       ),
       -1,
       false,
-    );
-  }, [active, progress]);
+    )
+  }, [active, progress])
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: (1 - progress.value) * 0.45,
@@ -58,18 +57,18 @@ function PulseRing({ active }: { active: boolean }) {
         scale: 1 + progress.value * 0.9,
       },
     ],
-  }));
+  }))
 
   return (
     <Animated.View
       style={animatedStyle}
-      className="border-primary absolute size-24 rounded-full border-2"
+      className="absolute size-24 rounded-full border-2 border-primary"
     />
-  );
+  )
 }
 
 function ProcessingRing() {
-  const rotation = useSharedValue(0);
+  const rotation = useSharedValue(0)
 
   useEffect(() => {
     rotation.value = withRepeat(
@@ -79,12 +78,12 @@ function ProcessingRing() {
       }),
       -1,
       false,
-    );
-  }, [rotation]);
+    )
+  }, [rotation])
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotation.value}deg` }],
-  }));
+  }))
 
   return (
     <Animated.View
@@ -92,7 +91,7 @@ function ProcessingRing() {
       className="absolute size-24 rounded-full"
     >
       <LinearGradient
-        colors={[AI_GRADIENT[1], AI_GRADIENT[0], "transparent"]}
+        colors={[AI_GRADIENT[1], AI_GRADIENT[0], 'transparent']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={{
@@ -102,14 +101,14 @@ function ProcessingRing() {
           padding: 3,
         }}
       >
-        <View className="bg-background flex-1 rounded-full" />
+        <View className="flex-1 rounded-full bg-background" />
       </LinearGradient>
     </Animated.View>
-  );
+  )
 }
 
 function formatDuration(seconds: number) {
-  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
 }
 
 export function VoiceRecorderModal({
@@ -117,71 +116,71 @@ export function VoiceRecorderModal({
   onClose,
   onExtracted,
 }: {
-  visible: boolean;
-  onClose: () => void;
-  onExtracted: (result: VoiceTransaction) => void;
+  visible: boolean
+  onClose: () => void
+  onExtracted: (result: VoiceTransaction) => void
 }) {
-  const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
+  const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY)
 
-  const [status, setStatus] = useState<Status>("idle");
-  const [seconds, setSeconds] = useState(0);
+  const [status, setStatus] = useState<Status>('idle')
+  const [seconds, setSeconds] = useState(0)
 
-  const orbScale = useSharedValue(1);
+  const orbScale = useSharedValue(1)
 
   const handleClose = () => {
-    setStatus("idle");
-    setSeconds(0);
-    onClose();
-  };
+    setStatus('idle')
+    setSeconds(0)
+    onClose()
+  }
 
   /*
    * Reset whenever the modal closes.
    */
   useEffect(() => {
     if (!visible) {
-      return;
+      return
     }
 
     const setupAudio = async () => {
       try {
-        const { granted } = await requestRecordingPermissionsAsync();
+        const { granted } = await requestRecordingPermissionsAsync()
 
         if (!granted) {
-          setStatus("error");
-          return;
+          setStatus('error')
+          return
         }
 
         await setAudioModeAsync({
           allowsRecording: true,
           playsInSilentMode: true,
-        });
+        })
       } catch (error) {
-        console.error("Audio setup failed:", error);
-        setStatus("error");
+        console.error('Audio setup failed:', error)
+        setStatus('error')
       }
-    };
+    }
 
-    setupAudio();
-  }, [visible]);
+    setupAudio()
+  }, [visible])
 
   /*
    * Recording timer.
    */
   useEffect(() => {
-    if (status !== "recording") return;
+    if (status !== 'recording') return
 
     const interval = setInterval(() => {
-      setSeconds((current) => current + 1);
-    }, 1000);
+      setSeconds((current) => current + 1)
+    }, 1000)
 
-    return () => clearInterval(interval);
-  }, [status]);
+    return () => clearInterval(interval)
+  }, [status])
 
   /*
    * Subtle breathing animation while recording.
    */
   useEffect(() => {
-    if (status === "recording") {
+    if (status === 'recording') {
       orbScale.value = withRepeat(
         withSequence(
           withTiming(1.08, {
@@ -195,70 +194,70 @@ export function VoiceRecorderModal({
         ),
         -1,
         false,
-      );
+      )
 
-      return;
+      return
     }
 
-    orbScale.value = withTiming(1, { duration: 200 });
-  }, [status, orbScale]);
+    orbScale.value = withTiming(1, { duration: 200 })
+  }, [status, orbScale])
 
   const orbStyle = useAnimatedStyle(() => ({
     transform: [{ scale: orbScale.value }],
-  }));
+  }))
   const { mutateAsync: extractTransactionFromVoice } =
-    trpc.ai.extractTransactionFromVoice.useMutation();
+    trpc.ai.extractTransactionFromVoice.useMutation()
 
   const startRecording = async () => {
     try {
-      setSeconds(0);
+      setSeconds(0)
 
-      await recorder.prepareToRecordAsync();
-      recorder.record();
+      await recorder.prepareToRecordAsync()
+      recorder.record()
 
-      setStatus("recording");
+      setStatus('recording')
     } catch (error) {
-      console.error("Recording failed to start:", error);
-      setStatus("error");
+      console.error('Recording failed to start:', error)
+      setStatus('error')
     }
-  };
+  }
 
   const stopRecording = async () => {
-    if (status !== "recording") return;
+    if (status !== 'recording') return
 
-    setStatus("processing");
+    setStatus('processing')
 
-    await recorder.stop();
+    await recorder.stop()
 
-    const uri = recorder.uri;
+    const uri = recorder.uri
 
     if (!uri) {
-      throw new Error("No recording captured");
+      throw new Error('No recording captured')
     }
 
-    const file = new File(uri);
-    const base64 = await file.base64();
+    const file = new File(uri)
+    const base64 = await file.base64()
 
     await extractTransactionFromVoice(
       {
         base64Audio: base64,
-        mimeType: "audio/m4a",
+        mimeType: 'audio/m4a',
       },
       {
         onSuccess: (data) => {
-          onExtracted(data);
-          handleClose();
+          onExtracted(data)
+          handleClose()
         },
         onError: (error) => {
-          console.error("Voice extraction failed:", error);
-          setStatus("error");
+          console.error('Voice extraction failed:', error)
+          setStatus('error')
         },
       },
-    );
-  };
+    )
+  }
 
-  const isProcessing = status === "processing";
-  const isRecording = status === "recording";
+  const isProcessing = status === 'processing'
+  const isRecording = status === 'recording'
 
   return (
     <Modal
@@ -273,7 +272,7 @@ export function VoiceRecorderModal({
 
         {/* Bottom sheet */}
         <LinearGradient
-          colors={["#1C1E2E", "#0F1020"]}
+          colors={['#1C1E2E', '#0F1020']}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           className="overflow-hidden rounded-t-[28px] px-6 pt-3 pb-10"
@@ -283,7 +282,7 @@ export function VoiceRecorderModal({
             <View className="h-1 w-10 rounded-full bg-white/15" />
           </View>
 
-          {status === "error" ? (
+          {status === 'error' ? (
             <ErrorState onClose={handleClose} />
           ) : (
             <>
@@ -296,25 +295,25 @@ export function VoiceRecorderModal({
                     color="#0E9C79"
                   />
 
-                  <Text className="font-brand-semibold text-primary text-[11px] uppercase">
+                  <Text className="font-brand-semibold text-[11px] text-primary uppercase">
                     AI voice log
                   </Text>
                 </View>
 
                 <Text className="font-brand-semibold text-lg text-white">
                   {isRecording
-                    ? "Listening…"
+                    ? 'Listening…'
                     : isProcessing
-                      ? "Understanding that…"
-                      : "Tell me about a transaction"}
+                      ? 'Understanding that…'
+                      : 'Tell me about a transaction'}
                 </Text>
 
-                <Text className="font-brand mt-2 text-center text-sm leading-5 text-white/50">
+                <Text className="mt-2 text-center font-brand text-sm text-white/50 leading-5">
                   {isRecording
-                    ? "Speak naturally about your transaction"
+                    ? 'Speak naturally about your transaction'
                     : isProcessing
-                      ? "Transcribing and extracting the details"
-                      : "Just describe what you spent or received"}
+                      ? 'Transcribing and extracting the details'
+                      : 'Just describe what you spent or received'}
                 </Text>
               </View>
 
@@ -328,13 +327,13 @@ export function VoiceRecorderModal({
                   </View>
                 ) : isProcessing ? (
                   <View className="rounded-full bg-white/5 px-4 py-2">
-                    <Text className="font-brand text-xs text-white/60">
+                    <Text className="font-brand text-white/60 text-xs">
                       This may take a moment
                     </Text>
                   </View>
                 ) : (
                   <View className="rounded-2xl bg-white/5 px-4 py-3">
-                    <Text className="font-brand text-center text-xs text-white/50 italic">
+                    <Text className="text-center font-brand text-white/50 text-xs italic">
                       “I spent 400 on groceries yesterday”
                     </Text>
                   </View>
@@ -350,13 +349,13 @@ export function VoiceRecorderModal({
                   </>
                 )}
 
-                {status === "idle" && <PulseRing active />}
+                {status === 'idle' && <PulseRing active />}
 
                 {isProcessing && <ProcessingRing />}
 
                 <Animated.View style={orbStyle}>
                   <GradientIconButton
-                    icon={isRecording ? "square" : "mic"}
+                    icon={isRecording ? 'square' : 'mic'}
                     colors={
                       isRecording
                         ? RECORDING_GRADIENT
@@ -372,8 +371,8 @@ export function VoiceRecorderModal({
               <View className="mt-7 min-h-10 items-center justify-center">
                 {isRecording ? (
                   <View className="flex-row items-center gap-2">
-                    <View className="bg-destructive size-2 rounded-full" />
-                    <Text className="font-brand-semibold text-xs text-white/60">
+                    <View className="size-2 rounded-full bg-destructive" />
+                    <Text className="font-brand-semibold text-white/60 text-xs">
                       Recording
                     </Text>
                   </View>
@@ -384,12 +383,12 @@ export function VoiceRecorderModal({
                       size={15}
                       color="#fff"
                     />
-                    <Text className="font-brand-semibold text-xs text-white/60">
+                    <Text className="font-brand-semibold text-white/60 text-xs">
                       Extracting transaction details
                     </Text>
                   </View>
                 ) : (
-                  <Text className="font-brand text-xs text-white/40">
+                  <Text className="font-brand text-white/40 text-xs">
                     Tap the microphone to start
                   </Text>
                 )}
@@ -405,8 +404,8 @@ export function VoiceRecorderModal({
                 <Text
                   className={
                     isProcessing
-                      ? "font-brand text-sm text-white/20"
-                      : "font-brand-semibold text-sm text-white/45"
+                      ? 'font-brand text-sm text-white/20'
+                      : 'font-brand-semibold text-sm text-white/45'
                   }
                 >
                   Cancel
@@ -417,21 +416,21 @@ export function VoiceRecorderModal({
         </LinearGradient>
       </View>
     </Modal>
-  );
+  )
 }
 
 function ErrorState({ onClose }: { onClose: () => void }) {
   return (
     <View className="items-center py-5">
-      <View className="bg-destructive/10 size-14 items-center justify-center rounded-full">
+      <View className="size-14 items-center justify-center rounded-full bg-destructive/10">
         <Feather name="alert-circle" size={27} color="#FF6B4A" />
       </View>
 
-      <Text className="font-brand-semibold mt-5 text-lg text-white">
+      <Text className="mt-5 font-brand-semibold text-lg text-white">
         Something went wrong
       </Text>
 
-      <Text className="font-brand mt-2 max-w-75 text-center text-sm leading-5 text-white/50">
+      <Text className="mt-2 max-w-75 text-center font-brand text-sm text-white/50 leading-5">
         We couldn&apos;t process your recording. Check your microphone
         permission and try again.
       </Text>
@@ -444,5 +443,5 @@ function ErrorState({ onClose }: { onClose: () => void }) {
         <Text className="font-brand-semibold text-sm text-white">Close</Text>
       </TouchableOpacity>
     </View>
-  );
+  )
 }

@@ -1,15 +1,15 @@
-import { initTRPC, TRPCError } from "@trpc/server";
-import superjson from "superjson";
-import { z, ZodError } from "zod";
-import { auth } from "../auth";
+import { initTRPC, TRPCError } from '@trpc/server'
+import superjson from 'superjson'
+import { ZodError, z } from 'zod'
+import { auth } from '../auth'
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const sessionData = await auth.api.getSession({ headers: opts.headers });
+  const sessionData = await auth.api.getSession({ headers: opts.headers })
   return {
     headers: opts.headers,
     sessionData,
-  };
-};
+  }
+}
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -21,17 +21,17 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
         zodError:
           error.cause instanceof ZodError ? z.treeifyError(error.cause) : null,
       },
-    };
+    }
   },
-});
+})
 
-export const createCallerFactory = t.createCallerFactory;
-export const createTRPCRouter = t.router;
-export const publicProcedure = t.procedure;
+export const createCallerFactory = t.createCallerFactory
+export const createTRPCRouter = t.router
+export const publicProcedure = t.procedure
 
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   if (!ctx.sessionData?.session) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
   return next({
     ctx: {
@@ -39,5 +39,5 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
       session: ctx.sessionData.session,
       user: ctx.sessionData.user,
     },
-  });
-});
+  })
+})

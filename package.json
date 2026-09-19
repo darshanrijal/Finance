@@ -71,14 +71,10 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.14",
     "@types/pg": "^8.23.1",
     "@types/react": "~19.2.2",
     "drizzle-kit": "^1.0.0-rc.4",
-    "eslint": "^9.0.0",
-    "eslint-config-expo": "~57.0.2",
-    "eslint-config-prettier": "^10.1.8",
-    "prettier": "^3.9.6",
-    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -87,8 +83,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "expo lint",
-    "format": "prettier --write \"**/*{js,jsx,ts,tsx,md}\"",
+    "lint": "biome lint .",
+    "format": "biome check --write .",
     "serve": "ngrok http 8081 --url https://pika-tough-routinely.ngrok-free.app",
     "db:push": "drizzle-kit push --config=drizzle.config.ts",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",

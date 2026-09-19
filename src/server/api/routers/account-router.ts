@@ -1,10 +1,10 @@
-import { createAccountSchema, updateAccountSchema } from "@/lib/validation";
-import { db } from "@/server/db";
-import { accounts, transactions } from "@/server/db/schema";
-import { TRPCError } from "@trpc/server";
-import { and, asc, count, desc, eq } from "drizzle-orm";
-import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { TRPCError } from '@trpc/server'
+import { and, asc, count, desc, eq } from 'drizzle-orm'
+import { z } from 'zod'
+import { createAccountSchema, updateAccountSchema } from '@/lib/validation'
+import { db } from '@/server/db'
+import { accounts, transactions } from '@/server/db/schema'
+import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const accountRouter = createTRPCRouter({
   getAccounts: protectedProcedure.query(async ({ ctx: { user } }) => {
@@ -12,8 +12,8 @@ export const accountRouter = createTRPCRouter({
       .select()
       .from(accounts)
       .where(eq(accounts.userId, user.id))
-      .orderBy(desc(accounts.createdAt), asc(accounts.createdAt));
-    return userAccounts;
+      .orderBy(desc(accounts.createdAt), asc(accounts.createdAt))
+    return userAccounts
   }),
   createAccount: protectedProcedure
     .input(createAccountSchema)
@@ -27,16 +27,16 @@ export const accountRouter = createTRPCRouter({
           isDefault: false,
           balance: 0,
         })
-        .returning();
+        .returning()
 
       if (!account) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to create account",
-        });
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create account',
+        })
       }
 
-      return account;
+      return account
     }),
 
   setDefaultAccount: protectedProcedure
@@ -59,7 +59,7 @@ export const accountRouter = createTRPCRouter({
               eq(accounts.id, input.accountId),
             ),
           ),
-      ]);
+      ])
     }),
 
   updateAccount: protectedProcedure
@@ -71,15 +71,15 @@ export const accountRouter = createTRPCRouter({
         .where(
           and(eq(accounts.userId, user.id), eq(accounts.id, input.accountId)),
         )
-        .returning();
+        .returning()
       if (!account) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Unable to create account",
-        });
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Unable to create account',
+        })
       }
 
-      return account;
+      return account
     }),
 
   deleteAccount: protectedProcedure
@@ -96,29 +96,29 @@ export const accountRouter = createTRPCRouter({
               eq(transactions.accountId, input.accountId),
               eq(transactions.userId, user.id),
             ),
-          );
+          )
 
         if (!transaction) {
           throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "No account found",
-          });
+            code: 'NOT_FOUND',
+            message: 'No account found',
+          })
         }
 
-        const txCount = transaction.count;
+        const txCount = transaction.count
 
         if (txCount > 0 && !input.force) {
-          return { deleted: false, transactionCount: txCount };
+          return { deleted: false, transactionCount: txCount }
         }
 
         await db
           .delete(accounts)
           .where(
             and(eq(accounts.id, input.accountId), eq(accounts.userId, user.id)),
-          );
-        return { deleted: true, transactionCount: txCount };
-      });
+          )
+        return { deleted: true, transactionCount: txCount }
+      })
 
-      return data;
+      return data
     }),
-});
+})

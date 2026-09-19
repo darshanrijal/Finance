@@ -2,35 +2,22 @@
   "version": "8",
   "dialect": "postgres",
   "id": "7e51be4c-956c-4ecf-93a8-1a7ecbe032b5",
-  "prevIds": [
-    "00000000-0000-0000-0000-000000000000"
-  ],
+  "prevIds": ["00000000-0000-0000-0000-000000000000"],
   "ddl": [
     {
-      "values": [
-        "CASH",
-        "CARD",
-        "SAVINGS"
-      ],
+      "values": ["CASH", "CARD", "SAVINGS"],
       "name": "account_types",
       "entityType": "enums",
       "schema": "public"
     },
     {
-      "values": [
-        "MANUAL",
-        "RECIPT_SCAN",
-        "VOICE"
-      ],
+      "values": ["MANUAL", "RECIPT_SCAN", "VOICE"],
       "name": "transactions_input_method",
       "entityType": "enums",
       "schema": "public"
     },
     {
-      "values": [
-        "INCOME",
-        "EXPENSE"
-      ],
+      "values": ["INCOME", "EXPENSE"],
       "name": "transactions_type",
       "entityType": "enums",
       "schema": "public"
@@ -1000,14 +987,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
+      "columns": ["user_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "account_user_id_user_id_fkey",
@@ -1017,14 +1000,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
+      "columns": ["user_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "money_accounts_user_id_user_id_fkey",
@@ -1034,14 +1013,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
+      "columns": ["user_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "bugdets_user_id_user_id_fkey",
@@ -1051,14 +1026,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
+      "columns": ["user_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "session_user_id_user_id_fkey",
@@ -1068,14 +1039,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
+      "columns": ["user_id"],
       "schemaTo": "public",
       "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "transactions_user_id_user_id_fkey",
@@ -1085,14 +1052,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "account_id"
-      ],
+      "columns": ["account_id"],
       "schemaTo": "public",
       "tableTo": "money_accounts",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "transactions_account_id_money_accounts_id_fkey",
@@ -1101,9 +1064,7 @@
       "table": "transactions"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "account_pkey",
       "schema": "public",
@@ -1111,9 +1072,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "money_accounts_pkey",
       "schema": "public",
@@ -1121,9 +1080,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "bugdets_pkey",
       "schema": "public",
@@ -1131,9 +1088,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "session_pkey",
       "schema": "public",
@@ -1141,9 +1096,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "transactions_pkey",
       "schema": "public",
@@ -1151,9 +1104,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "user_pkey",
       "schema": "public",
@@ -1161,9 +1112,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "verification_pkey",
       "schema": "public",
@@ -1172,9 +1121,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
+      "columns": ["user_id"],
       "nullsNotDistinct": false,
       "name": "bugdets_user_id_key",
       "schema": "public",
@@ -1183,9 +1130,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "token"
-      ],
+      "columns": ["token"],
       "nullsNotDistinct": false,
       "name": "session_token_key",
       "schema": "public",
@@ -1194,9 +1139,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "email"
-      ],
+      "columns": ["email"],
       "nullsNotDistinct": false,
       "name": "user_email_key",
       "schema": "public",

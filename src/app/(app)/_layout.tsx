@@ -1,10 +1,10 @@
-import { authClient } from "@/lib/auth-client";
-import { Stack } from "expo-router";
+import { Stack } from 'expo-router'
+import { authClient } from '@/lib/auth-client'
 
 export default function AppLayout() {
-  const { data } = authClient.useSession();
+  const { data } = authClient.useSession()
 
-  const isAuthenticated = !!data?.session.id;
+  const isAuthenticated = !!data?.session.id
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
@@ -17,5 +17,5 @@ export default function AppLayout() {
         <Stack.Screen name="(auth)" />
       </Stack.Protected>
     </Stack>
-  );
+  )
 }

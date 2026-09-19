@@ -1,16 +1,16 @@
-import { trpc } from "@/__rpc/react";
-import type { Budget } from "@/constants/Budget";
-import { useState } from "react";
-import { Text, TouchableOpacity } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import FormSheetModal from "./FormSheetModal";
+import { useState } from 'react'
+import { Text, TouchableOpacity } from 'react-native'
+import { TextInput } from 'react-native-gesture-handler'
+import { trpc } from '@/__rpc/react'
+import type { Budget } from '@/constants/Budget'
+import FormSheetModal from './FormSheetModal'
 
 interface BudgetModalProps {
-  visible: boolean;
-  onVisibilityChange: (visible: boolean) => void;
-  budget?: Budget | null;
-  onClose: () => void;
-  onSave: () => void;
+  visible: boolean
+  onVisibilityChange: (visible: boolean) => void
+  budget?: Budget | null
+  onClose: () => void
+  onSave: () => void
 }
 export default function BudgetModal({
   budget,
@@ -19,45 +19,45 @@ export default function BudgetModal({
   visible,
   onVisibilityChange,
 }: BudgetModalProps) {
-  const [amount, setAmount] = useState("");
-  const [error, setError] = useState("");
-  const utils = trpc.useUtils();
+  const [amount, setAmount] = useState('')
+  const [error, setError] = useState('')
+  const utils = trpc.useUtils()
   const { mutateAsync: upsertBudget, isPending } =
     trpc.budget.upsertBudget.useMutation({
       onSuccess: (budget) => {
-        utils.budget.getBudget.invalidate();
-        setAmount(budget.amount.toString());
+        utils.budget.getBudget.invalidate()
+        setAmount(budget.amount.toString())
       },
       onError: (error) => {
-        setError(error.message);
+        setError(error.message)
       },
-    });
+    })
 
   async function handleSave() {
-    setError("");
-    const parsedAmount = Number.parseFloat(amount.replace(/,/g, ""));
+    setError('')
+    const parsedAmount = Number.parseFloat(amount.replace(/,/g, ''))
     if (!parsedAmount || parsedAmount <= 0) {
-      setError("Enter a valid monthly budget");
-      return;
+      setError('Enter a valid monthly budget')
+      return
     }
 
     await upsertBudget(
       { amount: parsedAmount },
       {
         onSuccess: () => {
-          onSave();
+          onSave()
         },
       },
-    );
+    )
   }
 
   return (
     <FormSheetModal
       open={visible}
       onOpenChange={onVisibilityChange}
-      title={budget ? "Edit montly budget" : "Set monthly budget"}
+      title={budget ? 'Edit montly budget' : 'Set monthly budget'}
     >
-      <Text className="text-card-foreground font-brand">Montly Budget</Text>
+      <Text className="font-brand text-card-foreground">Montly Budget</Text>
       <TextInput
         value={amount}
         onChangeText={setAmount}
@@ -66,24 +66,24 @@ export default function BudgetModal({
         keyboardType="numeric"
         placeholderTextColorClassName="dark:accent-muted-foreground"
         autoFocus
-        className="dark:bg-secondary border-border text-primary mb-5 rounded-xl border bg-white px-4 py-3 text-sm"
+        className="mb-5 rounded-xl border border-border bg-white px-4 py-3 text-primary text-sm dark:bg-secondary"
       />
 
       {!!error && (
-        <Text className="text-destructive font-brand mb-3 text-xs">
+        <Text className="mb-3 font-brand text-destructive text-xs">
           {error}
         </Text>
       )}
       <TouchableOpacity
         onPress={handleSave}
         disabled={isPending}
-        className="bg-primary mb-3 items-center rounded-xl py-4"
+        className="mb-3 items-center rounded-xl bg-primary py-4"
         activeOpacity={0.85}
       >
-        <Text className="text-primary-foreground font-brand-semibold text-sm">
-          {isPending ? "Saving…" : "Save budget"}
+        <Text className="font-brand-semibold text-primary-foreground text-sm">
+          {isPending ? 'Saving…' : 'Save budget'}
         </Text>
       </TouchableOpacity>
     </FormSheetModal>
-  );
+  )
 }

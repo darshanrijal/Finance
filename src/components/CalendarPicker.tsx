@@ -1,17 +1,17 @@
-import DateTimePicker, { useDefaultStyles } from "react-native-ui-datepicker";
-import { useUniwind } from "uniwind";
+import DateTimePicker, { useDefaultStyles } from 'react-native-ui-datepicker'
+import { useUniwind } from 'uniwind'
 
 export function CalendarPicker({
   value,
   onChange,
   maximumDate,
 }: {
-  value: Date;
-  onChange: (date: Date) => void;
-  maximumDate?: Date;
+  value: Date
+  onChange: (date: Date) => void
+  maximumDate?: Date
 }) {
-  const theme = useUniwind().theme;
-  const defaultStyles = useDefaultStyles(theme);
+  const theme = useUniwind().theme
+  const defaultStyles = useDefaultStyles(theme)
 
   return (
     <DateTimePicker
@@ -20,7 +20,7 @@ export function CalendarPicker({
       maxDate={maximumDate}
       onChange={({ date }) => {
         if (date) {
-          onChange(new Date(date as string | number | Date));
+          onChange(new Date(date as string | number | Date))
         }
       }}
       styles={{
@@ -28,9 +28,9 @@ export function CalendarPicker({
         today: {
           ...defaultStyles.today,
           borderWidth: 1,
-          borderColor: "#1A1D26",
+          borderColor: '#1A1D26',
         },
       }}
     />
-  );
+  )
 }

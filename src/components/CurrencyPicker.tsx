@@ -1,7 +1,7 @@
-import cc from "currency-codes";
-import getSymbol from "currency-symbol-map";
-
-import { useMemo, useState } from "react";
+import Ionicons from '@expo/vector-icons/Ionicons'
+import cc from 'currency-codes'
+import getSymbol from 'currency-symbol-map'
+import { useMemo, useState } from 'react'
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -11,10 +11,8 @@ import {
   Text,
   TextInput,
   View,
-} from "react-native";
-
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { useResolveClassNames } from "uniwind";
+} from 'react-native'
+import { useResolveClassNames } from 'uniwind'
 
 export const AllCurrencies: CurrencyEntry[] = cc
   .codes()
@@ -23,33 +21,33 @@ export const AllCurrencies: CurrencyEntry[] = cc
     name: cc.code(code)?.currency ?? code,
     symbol: getSymbol(code) ?? code,
   }))
-  .filter((c) => c.symbol !== c.code);
+  .filter((c) => c.symbol !== c.code)
 
 export type CurrencyEntry = {
-  code: string;
-  name: string;
-  symbol: string;
-};
-
-interface CurrencyPickerProps {
-  open: boolean;
-  selectedCurrency: CurrencyEntry;
-  onClose: () => void;
-  onSelect: (currency: CurrencyEntry) => void;
+  code: string
+  name: string
+  symbol: string
 }
 
 interface CurrencyPickerProps {
-  open: boolean;
-  selectedCurrency: CurrencyEntry;
-  onClose: () => void;
-  onSelect: (currency: CurrencyEntry) => void;
+  open: boolean
+  selectedCurrency: CurrencyEntry
+  onClose: () => void
+  onSelect: (currency: CurrencyEntry) => void
 }
 
 interface CurrencyPickerProps {
-  open: boolean;
-  selectedCurrency: CurrencyEntry;
-  onClose: () => void;
-  onSelect: (currency: CurrencyEntry) => void;
+  open: boolean
+  selectedCurrency: CurrencyEntry
+  onClose: () => void
+  onSelect: (currency: CurrencyEntry) => void
+}
+
+interface CurrencyPickerProps {
+  open: boolean
+  selectedCurrency: CurrencyEntry
+  onClose: () => void
+  onSelect: (currency: CurrencyEntry) => void
 }
 
 export function CurrencyPicker({
@@ -58,33 +56,33 @@ export function CurrencyPicker({
   onClose,
   onSelect,
 }: CurrencyPickerProps) {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('')
 
   const currencies = useMemo(() => {
-    const query = search.trim().toLowerCase();
+    const query = search.trim().toLowerCase()
 
-    if (!query) return AllCurrencies;
+    if (!query) return AllCurrencies
 
     return AllCurrencies.filter(
       (currency) =>
         currency.code.toLowerCase().includes(query) ||
         currency.name.toLowerCase().includes(query),
-    );
-  }, [search]);
+    )
+  }, [search])
 
   function handleSelect(currency: CurrencyEntry) {
-    onSelect(currency);
-    setSearch("");
-    onClose();
+    onSelect(currency)
+    setSearch('')
+    onClose()
   }
 
   function handleClose() {
-    setSearch("");
-    onClose();
+    setSearch('')
+    onClose()
   }
 
-  const foregroundColor = useResolveClassNames("text-foreground");
-  const mutedForegroundColor = useResolveClassNames("text-muted-foreground");
+  const foregroundColor = useResolveClassNames('text-foreground')
+  const mutedForegroundColor = useResolveClassNames('text-muted-foreground')
   return (
     <Modal
       visible={open}
@@ -94,7 +92,7 @@ export function CurrencyPicker({
     >
       <KeyboardAvoidingView
         className="flex-1 justify-end"
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         {/* Backdrop */}
         <Pressable
@@ -103,20 +101,20 @@ export function CurrencyPicker({
         />
 
         {/* Bottom sheet */}
-        <View className="bg-background max-h-[85%] rounded-t-4xl px-5 pt-3 pb-8">
+        <View className="max-h-[85%] rounded-t-4xl bg-background px-5 pt-3 pb-8">
           {/* Drag handle */}
           <View className="mb-5 items-center">
-            <View className="bg-muted-foreground/30 h-1.5 w-12 rounded-full" />
+            <View className="h-1.5 w-12 rounded-full bg-muted-foreground/30" />
           </View>
 
           {/* Header */}
           <View className="mb-5 flex-row items-center justify-between">
             <View className="flex-1">
-              <Text className="text-foreground font-brand-bold text-2xl">
+              <Text className="font-brand-bold text-2xl text-foreground">
                 Choose currency
               </Text>
 
-              <Text className="text-muted-foreground font-brand mt-1">
+              <Text className="mt-1 font-brand text-muted-foreground">
                 Select your default currency
               </Text>
             </View>
@@ -124,14 +122,14 @@ export function CurrencyPicker({
             <Pressable
               onPress={handleClose}
               hitSlop={10}
-              className="bg-muted ml-4 h-10 w-10 items-center justify-center rounded-full active:opacity-70"
+              className="ml-4 h-10 w-10 items-center justify-center rounded-full bg-muted active:opacity-70"
             >
               <Ionicons name="close" size={22} color={foregroundColor.color} />
             </Pressable>
           </View>
 
           {/* Search */}
-          <View className="bg-muted mb-4 flex-row items-center rounded-2xl px-4">
+          <View className="mb-4 flex-row items-center rounded-2xl bg-muted px-4">
             <Ionicons
               name="search"
               size={20}
@@ -147,12 +145,12 @@ export function CurrencyPicker({
               autoCapitalize="none"
               autoCorrect={false}
               returnKeyType="search"
-              className="text-foreground font-brand flex-1 py-3.5 text-base"
+              className="flex-1 py-3.5 font-brand text-base text-foreground"
             />
 
             {search.length > 0 && (
               <Pressable
-                onPress={() => setSearch("")}
+                onPress={() => setSearch('')}
                 hitSlop={10}
                 className="ml-2"
               >
@@ -171,7 +169,7 @@ export function CurrencyPicker({
             keyExtractor={(item) => item.code}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode={
-              Platform.OS === "ios" ? "interactive" : "on-drag"
+              Platform.OS === 'ios' ? 'interactive' : 'on-drag'
             }
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
@@ -179,24 +177,24 @@ export function CurrencyPicker({
               flexGrow: currencies.length === 0 ? 1 : undefined,
             }}
             renderItem={({ item }) => {
-              const isSelected = item.code === selectedCurrency.code;
+              const isSelected = item.code === selectedCurrency.code
 
               return (
                 <Pressable
                   onPress={() => handleSelect(item)}
                   className={`mb-1 flex-row items-center rounded-2xl px-3 py-3.5 ${
-                    isSelected ? "bg-primary/10" : "active:bg-muted"
+                    isSelected ? 'bg-primary/10' : 'active:bg-muted'
                   }`}
                 >
                   {/* Currency symbol */}
                   <View
                     className={`mr-3 h-11 w-11 items-center justify-center rounded-xl ${
-                      isSelected ? "bg-primary" : "bg-muted"
+                      isSelected ? 'bg-primary' : 'bg-muted'
                     }`}
                   >
                     <Text
                       className={`font-brand-semibold text-lg ${
-                        isSelected ? "text-background" : "text-muted-foreground"
+                        isSelected ? 'text-background' : 'text-muted-foreground'
                       }`}
                     >
                       {item.symbol}
@@ -205,11 +203,11 @@ export function CurrencyPicker({
 
                   {/* Currency info */}
                   <View className="flex-1">
-                    <Text className="text-foreground font-brand-semibold text-base">
+                    <Text className="font-brand-semibold text-base text-foreground">
                       {item.name}
                     </Text>
 
-                    <Text className="text-muted-foreground font-brand mt-0.5 text-sm">
+                    <Text className="mt-0.5 font-brand text-muted-foreground text-sm">
                       {item.code}
                     </Text>
                   </View>
@@ -223,21 +221,21 @@ export function CurrencyPicker({
                     />
                   )}
                 </Pressable>
-              );
+              )
             }}
             ListEmptyComponent={
               <View className="flex-1 items-center justify-center py-10">
                 <Ionicons
                   name="search-outline"
                   size={32}
-                  className="text-muted-foreground mb-3"
+                  className="mb-3 text-muted-foreground"
                 />
 
-                <Text className="text-foreground font-brand-semibold">
+                <Text className="font-brand-semibold text-foreground">
                   No currency found
                 </Text>
 
-                <Text className="text-muted-foreground font-brand mt-1 text-center">
+                <Text className="mt-1 text-center font-brand text-muted-foreground">
                   Try searching by name or currency code.
                 </Text>
               </View>
@@ -246,5 +244,5 @@ export function CurrencyPicker({
         </View>
       </KeyboardAvoidingView>
     </Modal>
-  );
+  )
 }

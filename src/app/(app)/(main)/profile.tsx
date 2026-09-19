@@ -1,20 +1,8 @@
-import { trpc } from "@/__rpc/react";
-import AccountModal from "@/components/AccountModal";
-import {
-  AllCurrencies,
-  CurrencyEntry,
-  CurrencyPicker,
-} from "@/components/CurrencyPicker";
-import { SafeAreaView } from "@/components/SafeAreaView";
-import type { Account, AccountType } from "@/constants/account";
-import { useUserStore } from "@/hooks/useUser";
-import { authClient } from "@/lib/auth-client";
-import { cn, formatPrice } from "@/lib/utils";
-import Feather from "@expo/vector-icons/Feather";
-import { Image } from "expo-image";
-import * as ImagePicker from "expo-image-picker";
-import { useRouter } from "expo-router";
-import { type PropsWithChildren, useState } from "react";
+import Feather from '@expo/vector-icons/Feather'
+import { Image } from 'expo-image'
+import * as ImagePicker from 'expo-image-picker'
+import { useRouter } from 'expo-router'
+import { type PropsWithChildren, useState } from 'react'
 import {
   ActivityIndicator,
   Alert,
@@ -22,30 +10,42 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { useResolveClassNames } from "uniwind";
+} from 'react-native'
+import { useResolveClassNames } from 'uniwind'
+import { trpc } from '@/__rpc/react'
+import AccountModal from '@/components/AccountModal'
+import {
+  AllCurrencies,
+  CurrencyEntry,
+  CurrencyPicker,
+} from '@/components/CurrencyPicker'
+import { SafeAreaView } from '@/components/SafeAreaView'
+import type { Account, AccountType } from '@/constants/account'
+import { useUserStore } from '@/hooks/useUser'
+import { authClient } from '@/lib/auth-client'
+import { cn, formatPrice } from '@/lib/utils'
 
 const accountIcon: Record<AccountType, keyof typeof Feather.glyphMap> = {
-  CASH: "dollar-sign",
-  CARD: "credit-card",
-  SAVINGS: "shield",
-};
+  CASH: 'dollar-sign',
+  CARD: 'credit-card',
+  SAVINGS: 'shield',
+}
 
 function SectionLabel({ children }: PropsWithChildren) {
   return (
-    <Text className="text-muted-foreground mx-5 mt-6 mb-2 text-[11px] uppercase">
+    <Text className="mx-5 mt-6 mb-2 text-[11px] text-muted-foreground uppercase">
       {children}
     </Text>
-  );
+  )
 }
 
 interface RowProps {
-  icon: keyof typeof Feather.glyphMap;
-  label: string;
-  value?: string;
-  onPress?: () => void;
-  showChevron?: boolean;
-  danger?: boolean;
+  icon: keyof typeof Feather.glyphMap
+  label: string
+  value?: string
+  onPress?: () => void
+  showChevron?: boolean
+  danger?: boolean
 }
 function Row({
   icon,
@@ -55,13 +55,13 @@ function Row({
   showChevron = true,
   danger = false,
 }: RowProps) {
-  const isInteractive = !!onPress;
+  const isInteractive = !!onPress
 
   const iconColor = useResolveClassNames(
-    danger ? "text-destructive" : "text-muted-foreground",
-  ).color;
+    danger ? 'text-destructive' : 'text-muted-foreground',
+  ).color
 
-  const mutedColor = useResolveClassNames("text-muted-foreground").color;
+  const mutedColor = useResolveClassNames('text-muted-foreground').color
 
   return (
     <TouchableOpacity
@@ -69,14 +69,14 @@ function Row({
       disabled={!isInteractive}
       activeOpacity={0.7}
       className={cn(
-        "flex-row items-center px-4 py-3.5",
-        isInteractive && "active:bg-muted/50",
+        'flex-row items-center px-4 py-3.5',
+        isInteractive && 'active:bg-muted/50',
       )}
     >
       <View
         className={cn(
-          "mr-3 size-9 items-center justify-center rounded-xl",
-          danger ? "bg-destructive/10" : "bg-muted",
+          'mr-3 size-9 items-center justify-center rounded-xl',
+          danger ? 'bg-destructive/10' : 'bg-muted',
         )}
       >
         <Feather name={icon} size={16} color={iconColor} />
@@ -84,8 +84,8 @@ function Row({
 
       <Text
         className={cn(
-          "font-brand flex-1 text-sm",
-          danger ? "text-destructive" : "text-foreground",
+          'flex-1 font-brand text-sm',
+          danger ? 'text-destructive' : 'text-foreground',
         )}
       >
         {label}
@@ -94,7 +94,7 @@ function Row({
       {value && (
         <Text
           numberOfLines={1}
-          className="font-brand-semibold text-muted-foreground mr-2 max-w-[120px] text-xs"
+          className="mr-2 max-w-[120px] font-brand-semibold text-muted-foreground text-xs"
         >
           {value}
         </Text>
@@ -104,136 +104,136 @@ function Row({
         <Feather name="chevron-right" size={17} color={mutedColor} />
       )}
     </TouchableOpacity>
-  );
+  )
 }
 export default function Profile() {
-  const { data, refetch: refetchUser } = authClient.useSession();
-  const router = useRouter();
-  const { currency, setCurrency } = useUserStore();
-  const [modalVisible, setmodalVisible] = useState(false);
-  const [editingAccount, seteditingAccount] = useState<Account | null>(null);
-  const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false);
-  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const { data, refetch: refetchUser } = authClient.useSession()
+  const router = useRouter()
+  const { currency, setCurrency } = useUserStore()
+  const [modalVisible, setmodalVisible] = useState(false)
+  const [editingAccount, seteditingAccount] = useState<Account | null>(null)
+  const [currencyPickerOpen, setCurrencyPickerOpen] = useState(false)
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
 
   const {
     data: accounts = [],
     isLoading: loadingAccounts,
     isError: accountsError,
-  } = trpc.accounts.getAccounts.useQuery();
+  } = trpc.accounts.getAccounts.useQuery()
 
   const { mutateAsync: setDefaultAccount } =
-    trpc.accounts.setDefaultAccount.useMutation();
+    trpc.accounts.setDefaultAccount.useMutation()
 
   const closeModal = () => {
-    setmodalVisible(false);
-    seteditingAccount(null);
-  };
+    setmodalVisible(false)
+    seteditingAccount(null)
+  }
 
   if (!data) {
-    return null;
+    return null
   }
-  const user = data.user;
+  const user = data.user
 
   function handleSignOut() {
-    Alert.alert("Sign out", "Are you sure you want to sign out?", [
-      { text: "Cancel", style: "cancel" },
+    Alert.alert('Sign out', 'Are you sure you want to sign out?', [
+      { text: 'Cancel', style: 'cancel' },
       {
-        text: "Sign out",
-        style: "destructive",
+        text: 'Sign out',
+        style: 'destructive',
         onPress: async () => {
           await authClient.signOut({
             fetchOptions: {
               onSuccess: () => {
-                router.replace("/(app)/(auth)");
+                router.replace('/(app)/(auth)')
               },
             },
-          });
+          })
         },
       },
-    ]);
+    ])
   }
 
   const handlePickAvatar = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync()
     if (!permission.granted) {
       Alert.alert(
-        "Permission needed",
-        "Allow photo library access to set profile picture",
-      );
-      return;
+        'Permission needed',
+        'Allow photo library access to set profile picture',
+      )
+      return
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.7,
       base64: true,
-    });
+    })
 
     if (result.canceled) {
-      return;
+      return
     }
 
-    const asset = result.assets[0];
+    const asset = result.assets[0]
     if (!asset) {
-      return;
+      return
     }
 
-    const filename = asset.uri.split("/").pop() || "avatar.jpg";
-    const match = /\.(\w+)$/.exec(filename);
-    const mimeType = match ? `image/${match[1]}` : "image/jpeg";
-    const dataUrl = `data:${mimeType};base64,${asset?.base64}`;
+    const filename = asset.uri.split('/').pop() || 'avatar.jpg'
+    const match = /\.(\w+)$/.exec(filename)
+    const mimeType = match ? `image/${match[1]}` : 'image/jpeg'
+    const dataUrl = `data:${mimeType};base64,${asset?.base64}`
 
-    setUploadingAvatar(true);
+    setUploadingAvatar(true)
 
     await authClient.updateUser({
       image: dataUrl,
       fetchOptions: {
         onError: () => {
-          Alert.alert("Error", "Couldn't upload your photo. Please try again");
+          Alert.alert('Error', "Couldn't upload your photo. Please try again")
         },
         onSuccess: () => {
-          refetchUser();
+          refetchUser()
         },
         onResponse: () => {
-          setUploadingAvatar(false);
+          setUploadingAvatar(false)
         },
       },
-    });
-  };
+    })
+  }
 
   const handleMakeDefault = async () => {
     if (!editingAccount) {
-      return;
+      return
     }
 
     await setDefaultAccount(
       { accountId: editingAccount.id },
       {
         onSuccess: () => {
-          closeModal();
+          closeModal()
         },
         onError: (error) => {
-          Alert.alert("Error setting default account", error.message);
+          Alert.alert('Error setting default account', error.message)
         },
       },
-    );
-  };
+    )
+  }
   const handleCurrencySelect = async (currency: CurrencyEntry) => {
-    setCurrencyPickerOpen(false);
+    setCurrencyPickerOpen(false)
     setCurrency(
       { currency: currency.code },
       {
         onError: () => {
-          Alert.alert("Error", "Couldn't update currency");
+          Alert.alert('Error', "Couldn't update currency")
         },
       },
-    );
-  };
+    )
+  }
 
   return (
-    <SafeAreaView className="bg-background flex-1" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerClassName="pb-25"
@@ -244,12 +244,12 @@ export default function Profile() {
           </Text>
         </View>
 
-        <View className="bg-card mx-5 mt-2 items-center rounded-2xl px-5 py-6">
+        <View className="mx-5 mt-2 items-center rounded-2xl bg-card px-5 py-6">
           <TouchableOpacity
             onPress={handlePickAvatar}
             disabled={uploadingAvatar}
             activeOpacity={0.8}
-            className="bg-card border-border size-20 items-center justify-center overflow-hidden rounded-full border-2"
+            className="size-20 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-card"
           >
             {uploadingAvatar ? (
               <ActivityIndicator colorClassName="accent-primary" />
@@ -260,29 +260,29 @@ export default function Profile() {
                 contentFit="cover"
               />
             ) : (
-              <Feather name="user" size={30} color={"#8a8d96"} />
+              <Feather name="user" size={30} color={'#8a8d96'} />
             )}
             <View className="absolute inset-x-0 bottom-0 h-6 items-center justify-center bg-black/50">
               <Feather name="camera" size={13} color="#F2EFE9" />
             </View>
           </TouchableOpacity>
-          <Text className="font-brand-semibold text-foreground mt-2 text-lg">
+          <Text className="mt-2 font-brand-semibold text-foreground text-lg">
             {user.name}
           </Text>
 
-          <Text className="text-muted-foreground font-brand text-xs">
+          <Text className="font-brand text-muted-foreground text-xs">
             {user.email}
           </Text>
         </View>
 
         <SectionLabel>Accounts</SectionLabel>
-        <View className="border-border mx-5 overflow-hidden rounded-2xl border">
+        <View className="mx-5 overflow-hidden rounded-2xl border border-border">
           {loadingAccounts ? (
-            <View className="bg-card items-center px-4 py-5">
+            <View className="items-center bg-card px-4 py-5">
               <ActivityIndicator color="#5C5F68" />
             </View>
           ) : accountsError ? (
-            <View className="bg-card items-center px-4 py-5">
+            <View className="items-center bg-card px-4 py-5">
               <Text className="text-brand-text-muted text-xs">
                 Couldn&apos;t load your accounts.
               </Text>
@@ -292,11 +292,11 @@ export default function Profile() {
               <Row
                 key={account.id}
                 icon={accountIcon[account.type]}
-                label={account.name + (account.isDefault ? " (default)" : "")}
+                label={account.name + (account.isDefault ? ' (default)' : '')}
                 value={formatPrice(account.balance, currency)}
                 onPress={() => {
-                  seteditingAccount(account);
-                  setmodalVisible(true);
+                  seteditingAccount(account)
+                  setmodalVisible(true)
                 }}
               />
             ))
@@ -305,14 +305,14 @@ export default function Profile() {
             icon="plus"
             label="Add account"
             onPress={() => {
-              seteditingAccount(null);
-              setmodalVisible(true);
+              seteditingAccount(null)
+              setmodalVisible(true)
             }}
           />
         </View>
 
         <SectionLabel>Preferences</SectionLabel>
-        <View className="border-border mx-5 overflow-hidden rounded-2xl border">
+        <View className="mx-5 overflow-hidden rounded-2xl border border-border">
           <Row
             icon="dollar-sign"
             label="Currency"
@@ -323,7 +323,7 @@ export default function Profile() {
 
         <SectionLabel>Actions</SectionLabel>
 
-        <View className="border-border mx-5 overflow-hidden rounded-2xl border">
+        <View className="mx-5 overflow-hidden rounded-2xl border border-border">
           <Row
             icon="log-out"
             label="Sign out"
@@ -350,5 +350,5 @@ export default function Profile() {
         onClose={() => setCurrencyPickerOpen(false)}
       />
     </SafeAreaView>
-  );
+  )
 }

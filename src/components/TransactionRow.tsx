@@ -1,30 +1,31 @@
-import { type CategoryKey, getCategoryConfig } from "@/constants/categories";
-import type { InputMethod, Transaction } from "@/constants/transaction";
-import { useUserStore } from "@/hooks/useUser";
-import { cn, formatPrice } from "@/lib/utils";
-import Feather from "@expo/vector-icons/Feather";
-import { Text, TouchableOpacity, View } from "react-native";
-import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
+import Feather from '@expo/vector-icons/Feather'
+import { Text, TouchableOpacity, View } from 'react-native'
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
+import { type CategoryKey, getCategoryConfig } from '@/constants/categories'
+import type { InputMethod, Transaction } from '@/constants/transaction'
+import { useUserStore } from '@/hooks/useUser'
+import { cn, formatPrice } from '@/lib/utils'
+
 const INPUT_METHOD_ICON: Record<InputMethod, keyof typeof Feather.glyphMap> = {
-  MANUAL: "edit-3",
-  RECIPT_SCAN: "camera",
-  VOICE: "mic",
-};
+  MANUAL: 'edit-3',
+  RECIPT_SCAN: 'camera',
+  VOICE: 'mic',
+}
 
 export function TransactionRow({
   tx,
   onDelete,
 }: {
-  tx: Transaction;
-  onDelete?: () => void;
+  tx: Transaction
+  onDelete?: () => void
 }) {
-  const config = getCategoryConfig(tx.category as CategoryKey);
-  const isIncome = tx.type === "INCOME";
-  const { currency } = useUserStore();
+  const config = getCategoryConfig(tx.category as CategoryKey)
+  const isIncome = tx.type === 'INCOME'
+  const { currency } = useUserStore()
 
   const row = (
     <View
-      className="dark:bg-secondary bg-card border-border flex-row items-center rounded-2xl border py-4 pr-3.5 pl-3"
+      className="flex-row items-center rounded-2xl border border-border bg-card py-4 pr-3.5 pl-3 dark:bg-secondary"
       style={{
         borderLeftWidth: 3,
         borderLeftColor: config.color,
@@ -40,7 +41,7 @@ export function TransactionRow({
       </View>
 
       <View className="flex-1">
-        <Text className="text-primary text-sm font-medium" numberOfLines={1}>
+        <Text className="font-medium text-primary text-sm" numberOfLines={1}>
           {tx.description || config.label}
         </Text>
 
@@ -58,7 +59,7 @@ export function TransactionRow({
             }}
           >
             <Text
-              className="text-[10px] font-medium"
+              className="font-medium text-[10px]"
               style={{
                 color: config.color,
               }}
@@ -71,7 +72,7 @@ export function TransactionRow({
             <View className="ml-1 flex-row items-center gap-1">
               <Feather name="alert-triangle" size={11} color="#FF6B4A" />
 
-              <Text className="text-destructive text-[11px]">Flagged</Text>
+              <Text className="text-[11px] text-destructive">Flagged</Text>
             </View>
           )}
         </View>
@@ -79,18 +80,18 @@ export function TransactionRow({
 
       <Text
         className={cn(
-          "font-brand text-sm",
-          isIncome ? "text-green-600" : "text-red-600",
+          'font-brand text-sm',
+          isIncome ? 'text-green-600' : 'text-red-600',
         )}
       >
-        {isIncome ? "+" : "-"}
+        {isIncome ? '+' : '-'}
         {formatPrice(tx.amount, currency)}
       </Text>
     </View>
-  );
+  )
 
   if (!onDelete) {
-    return <View className="mb-2.5">{row}</View>;
+    return <View className="mb-2.5">{row}</View>
   }
 
   return (
@@ -100,7 +101,7 @@ export function TransactionRow({
         renderRightActions={() => (
           <TouchableOpacity
             onPress={onDelete}
-            className="bg-destructive ml-2 w-16 items-center justify-center rounded-2xl"
+            className="ml-2 w-16 items-center justify-center rounded-2xl bg-destructive"
           >
             <Feather name="trash-2" size={18} color="#fff" />
           </TouchableOpacity>
@@ -109,5 +110,5 @@ export function TransactionRow({
         {row}
       </Swipeable>
     </View>
-  );
+  )
 }

@@ -1,49 +1,49 @@
-import type { CategoryKey } from "@/constants/categories";
-import { AccountTypeEnum, TransactionTypeEnum } from "@/server/db/schema";
-import { z } from "zod";
+import { z } from 'zod'
+import type { CategoryKey } from '@/constants/categories'
+import { AccountTypeEnum, TransactionTypeEnum } from '@/server/db/schema'
 
 export const onboardingSchema = z.object({
   startingBalance: z
     .string()
-    .min(1, "Please enter a starting balance.")
+    .min(1, 'Please enter a starting balance.')
     .refine(
       (v) => {
-        const parsed = parseFloat(v.replace(/,/g, ""));
-        return !Number.isNaN(parsed) && parsed > 0;
+        const parsed = parseFloat(v.replace(/,/g, ''))
+        return !Number.isNaN(parsed) && parsed > 0
       },
-      { error: "Please enter a valid starting balance" },
+      { error: 'Please enter a valid starting balance' },
     ),
-});
+})
 
-export type OnboardingValues = z.infer<typeof onboardingSchema>;
+export type OnboardingValues = z.infer<typeof onboardingSchema>
 
 export const addTransactionSchema = z.object({
   type: z.enum(TransactionTypeEnum.enumValues),
   amount: z
     .string()
-    .min(1, "Please enter an amount.")
+    .min(1, 'Please enter an amount.')
     .refine(
       (v) => {
-        const parsed = parseFloat(v.replace(/,/g, ""));
-        return !Number.isNaN(parsed) && parsed > 0;
+        const parsed = parseFloat(v.replace(/,/g, ''))
+        return !Number.isNaN(parsed) && parsed > 0
       },
-      { error: "Please enter a valid amount" },
+      { error: 'Please enter a valid amount' },
     ),
-  category: z.custom<CategoryKey>((v) => typeof v === "string"),
-  accountId: z.cuid2("Select a valid account"),
+  category: z.custom<CategoryKey>((v) => typeof v === 'string'),
+  accountId: z.cuid2('Select a valid account'),
   description: z.string().optional(),
   date: z.date(),
-});
-export type AddTransactionValues = z.infer<typeof addTransactionSchema>;
+})
+export type AddTransactionValues = z.infer<typeof addTransactionSchema>
 
 export const createAccountSchema = z.object({
-  name: z.string("Provide an account name to continue"),
+  name: z.string('Provide an account name to continue'),
   type: z.enum(AccountTypeEnum.enumValues),
-});
-export type CreateAccountValues = z.infer<typeof createAccountSchema>;
+})
+export type CreateAccountValues = z.infer<typeof createAccountSchema>
 
 export const updateAccountSchema = z.object({
-  name: z.string().nonempty("Name is required"),
-  type: z.enum(AccountTypeEnum.enumValues, { error: "Select a account type" }),
-});
-export type UpdateAccountValues = z.infer<typeof updateAccountSchema>;
+  name: z.string().nonempty('Name is required'),
+  type: z.enum(AccountTypeEnum.enumValues, { error: 'Select a account type' }),
+})
+export type UpdateAccountValues = z.infer<typeof updateAccountSchema>

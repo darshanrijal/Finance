@@ -1,11 +1,11 @@
-import { cn } from "@/lib/utils";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { cn } from '@/lib/utils'
 
 export type PillOption<T extends string> = {
-  key: T;
-  label: string;
-  icon?: string;
-};
+  key: T
+  label: string
+  icon?: string
+}
 
 export function PillGroup<T extends string>({
   options,
@@ -13,15 +13,15 @@ export function PillGroup<T extends string>({
   onChange,
   scrollable = true,
 }: {
-  options: PillOption<T>[];
-  value: T;
-  onChange: (key: T) => void;
-  scrollable?: boolean;
+  options: PillOption<T>[]
+  value: T
+  onChange: (key: T) => void
+  scrollable?: boolean
 }) {
   const row = (
     <View className="flex-row gap-2">
       {options.map((option) => {
-        const isSelected = value === option.key;
+        const isSelected = value === option.key
 
         return (
           <TouchableOpacity
@@ -29,19 +29,19 @@ export function PillGroup<T extends string>({
             onPress={() => onChange(option.key)}
             activeOpacity={0.7}
             className={cn(
-              "flex-row items-center gap-1.5 rounded-full border px-3.5 py-2.5",
+              'flex-row items-center gap-1.5 rounded-full border px-3.5 py-2.5',
               isSelected
-                ? "border-primary bg-primary"
-                : "border-border bg-card",
+                ? 'border-primary bg-primary'
+                : 'border-border bg-card',
             )}
           >
             {option.icon && (
               <Text
                 className={cn(
-                  "text-xs",
+                  'text-xs',
                   isSelected
-                    ? "text-primary-foreground"
-                    : "text-muted-foreground",
+                    ? 'text-primary-foreground'
+                    : 'text-muted-foreground',
                 )}
               >
                 {option.icon}
@@ -50,20 +50,20 @@ export function PillGroup<T extends string>({
 
             <Text
               className={cn(
-                "font-brand-semibold text-xs",
-                isSelected ? "text-primary-foreground" : "text-card-foreground",
+                'font-brand-semibold text-xs',
+                isSelected ? 'text-primary-foreground' : 'text-card-foreground',
               )}
             >
               {option.label}
             </Text>
           </TouchableOpacity>
-        );
+        )
       })}
     </View>
-  );
+  )
 
   if (!scrollable) {
-    return row;
+    return row
   }
 
   return (
@@ -74,5 +74,5 @@ export function PillGroup<T extends string>({
     >
       {row}
     </ScrollView>
-  );
+  )
 }

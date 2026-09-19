@@ -1,31 +1,31 @@
-import { AllCurrencies } from "@/components/CurrencyPicker";
-import { Budget } from "@/constants/Budget";
+import { TRPCError } from '@trpc/server'
+import { generateText, Output } from 'ai'
+import { z } from 'zod'
+import { AllCurrencies } from '@/components/CurrencyPicker'
+import { Budget } from '@/constants/Budget'
 import {
   CATEGORY_KEYS_EXPENSE,
   CATEGORY_KEYS_INCOME,
-} from "@/constants/categories";
-import { Transaction } from "@/constants/transaction";
+} from '@/constants/categories'
+import { Transaction } from '@/constants/transaction'
 import {
   google,
   receiptInputSchema,
   receiptOutputSchema,
   voiceInputSchema,
   voiceOutputSchema,
-} from "@/lib/ai";
-import { buildContext } from "@/lib/assistant";
-import { TRPCError } from "@trpc/server";
-import { generateText, Output } from "ai";
-import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+} from '@/lib/ai'
+import { buildContext } from '@/lib/assistant'
+import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const aiRouter = createTRPCRouter({
   extractTransactionFromReceipt: protectedProcedure
     .input(receiptInputSchema)
     .mutation(async ({ input }) => {
-      const { base64Image, mimeType } = input;
+      const { base64Image, mimeType } = input
 
       const { output } = await generateText({
-        model: google("gemini-3.1-flash-lite"),
+        model: google('gemini-3.1-flash-lite'),
 
         output: Output.object({
           schema: receiptOutputSchema,
@@ -45,36 +45,36 @@ Rules:
 - Never guess or invent information.
 
 Available expense categories:
-${CATEGORY_KEYS_EXPENSE.join(", ")}`,
+${CATEGORY_KEYS_EXPENSE.join(', ')}`,
 
         messages: [
           {
-            role: "user",
+            role: 'user',
             content: [
               {
-                type: "text",
-                text: "Extract the transaction details from this receipt.",
+                type: 'text',
+                text: 'Extract the transaction details from this receipt.',
               },
               {
-                type: "image",
+                type: 'image',
                 image: `data:${mimeType};base64,${base64Image}`,
               },
             ],
           },
         ],
-      });
+      })
 
-      return output;
+      return output
     }),
   extractTransactionFromVoice: protectedProcedure
     .input(voiceInputSchema)
     .mutation(async ({ input }) => {
-      const { base64Audio, mimeType } = input;
+      const { base64Audio, mimeType } = input
 
-      const today = new Date().toISOString().slice(0, 10);
+      const today = new Date().toISOString().slice(0, 10)
 
       const { output } = await generateText({
-        model: google("gemini-3.1-flash-lite"),
+        model: google('gemini-3.1-flash-lite'),
 
         output: Output.object({
           schema: voiceOutputSchema,
@@ -99,30 +99,30 @@ Rules:
 - Never guess or invent information.
 
 Expense categories:
-${CATEGORY_KEYS_EXPENSE.join(", ")}
+${CATEGORY_KEYS_EXPENSE.join(', ')}
 
 Income categories:
-${CATEGORY_KEYS_INCOME.join(", ")}`,
+${CATEGORY_KEYS_INCOME.join(', ')}`,
 
         messages: [
           {
-            role: "user",
+            role: 'user',
             content: [
               {
-                type: "text",
-                text: "Transcribe the audio and extract the transaction details.",
+                type: 'text',
+                text: 'Transcribe the audio and extract the transaction details.',
               },
               {
-                type: "file",
+                type: 'file',
                 data: `data:${mimeType};base64,${base64Audio}`,
                 mediaType: mimeType,
               },
             ],
           },
         ],
-      });
+      })
 
-      return output;
+      return output
     }),
   askAssistant: protectedProcedure
     .input(
@@ -135,17 +135,17 @@ ${CATEGORY_KEYS_INCOME.join(", ")}`,
           .refine(
             (value) =>
               AllCurrencies.some((currency) => currency.code === value),
-            "Invalid currency",
+            'Invalid currency',
           ),
       }),
     )
     .mutation(async ({ input }) => {
-      const { question, transactions, budget, currency } = input;
+      const { question, transactions, budget, currency } = input
 
-      const context = buildContext(transactions, budget, currency);
+      const context = buildContext(transactions, budget, currency)
 
       const { text } = await generateText({
-        model: google("gemini-3.1-flash-lite"),
+        model: google('gemini-3.1-flash-lite'),
 
         instructions: `You are the personal finance assistant inside the Welth app.
 
@@ -163,15 +163,15 @@ Financial data:
 ${context}`,
 
         prompt: question,
-      });
+      })
 
       if (!text.trim()) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Could not complete your request",
-        });
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Could not complete your request',
+        })
       }
 
-      return text;
+      return text
     }),
-});
+})
